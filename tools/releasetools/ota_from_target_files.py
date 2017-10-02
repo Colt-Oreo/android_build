@@ -498,6 +498,37 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   system_progress = 0.75
 
+  script.Print("***********************************************");
+  script.Print("*                                             *");
+  script.Print("*    CCCCC         lll tt     OOOOO   SSSSS   *");
+  script.Print("*   CC    C  oooo  lll tt    OO   OO SS       *");
+  script.Print("*   CC      oo  oo lll tttt  OO   OO  SSSSS   *");
+  script.Print("*   CC    C oo  oo lll tt    OO   OO      SS  *");
+  script.Print("*    CCCCC   oooo  lll  tttt  OOOO0   SSSSS   *");
+  script.Print("*                                             *");
+  script.Print("***********************************************");
+
+  build = GetBuildProp("ro.colt.version", OPTIONS.info_dict)
+  if os.getenv("COLT_BUILDTYPE") is not None:
+    script.Print("*   Version: %s"%(build));
+  elif os.getenv("COLT_NIGHTLY") is not None:
+    script.Print("*   Version: %s"%(build));
+  else:
+    build = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+    script.Print("*********************************************");
+    script.Print("************* By:- Rakesh Batra *************");
+    script.Print("****       More than a Custom ROM       *****");
+    script.Print("*********************************************");
+    script.Print("*   Compiled: %s"%(build));
+
+  device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
+  if GetBuildProp("ro.product.model", OPTIONS.info_dict) is not None:
+    model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+    script.Print("*   Device: %s (%s)"%(model, device));
+  else:
+    script.Print("*   Device: %s"%(device));
+  script.Print("*********************************************");
+
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
   if HasVendorPartition(input_zip):
@@ -594,8 +625,8 @@ def GetBuildProp(prop, info_dict):
   try:
     return info_dict.get("build.prop", {})[prop]
   except KeyError:
-    raise common.ExternalError("couldn't find %s in build.prop" % (prop,))
-
+    print ("WARNING: could not find %s in build.prop" % (prop,))
+    return None
 
 def HandleDowngradeMetadata(metadata):
   # Only incremental OTAs are allowed to reach here.
